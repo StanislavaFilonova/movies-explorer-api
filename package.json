@@ -1,0 +1,22 @@
+{
+  "name": "films-explorer-api",
+  "version": "1.0.0",
+  "description": "Учебный проект по поиску фильмов",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "npx eslint ./"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StanislavaFilonova/movies-explorer-api.git"
+  },
+  "author": "StanislavaFilonova",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/StanislavaFilonova/movies-explorer-api/issues"
+  },
+  "homepage": "https://github.com/StanislavaFilonova/movies-explorer-api#readme"
+}
