@@ -9,7 +9,7 @@ const {
 const {
   validatyMovieId,
   validatyMovie,
-} = require('../middlewares/validity');
+} = require('../middlewares/validation');
 
 router.get('/movies', getMovies);
 router.post('/movies', validatyMovie, createMovie);

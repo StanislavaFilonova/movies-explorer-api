@@ -1,10 +1,11 @@
 const Movie = require('../models/movie');
 
-const NotFoundError = require('../errors/NotFound');
-const BadRequestError = require('../errors/BadRequest');
-const ForbiddenError = require('../errors/Forbidden');
+// Импорт ошибок
+const NotFoundError = require('../errors/NotFoundError');
+const BadRequestError = require('../errors/BadRequestError');
+const ForbiddenError = require('../errors/ForbiddenError');
 
-// GET /movies — возвращает все movies
+// GET /movies — возвращает все фильмы movies
 const getMovies = (req, res, next) => {
   const owner = req.user._id;
   Movie.find({ owner })

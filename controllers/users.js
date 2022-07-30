@@ -1,11 +1,3 @@
-/*  Задание:
-   login (/POST)  авторизация(залогинивание) пользователя по email и password
-   GET    /users/:userId - возвращает пользователя по _id
-   POST /signup — создаём пользователя по обязательным полям email и password
-   PATCH  /users/me — обновляет профиль
-*/
-
-// const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs'); // импортируем bcrypt
 const jwt = require('jsonwebtoken'); // импортируем модуль jsonwebtoken
 const User = require('../models/user');
@@ -41,8 +33,15 @@ const login = (req, res, next) => {
     });
 };
 // ------------------------------------------------------------------------------------------------
+//  GET /users — возвращает всех пользователей
+const getUsers = (req, res, next) => {
+  User.find({})
+    .then((result) => res.send(result))
+    .catch(next);
+};
+// ------------------------------------------------------------------------------------------------
 // GET /users/me — возвращает пользователя по _id
-const getCurrentUser = (req, res, next) => {
+const getUser = (req, res, next) => {
   // Запустим проверку валидности параметров
   User.findById(req.user._id)
     .then((user) => {
@@ -101,8 +100,8 @@ const createUser = (req, res, next) => {
               }));
         }
       }).catch((err) => {
-      next(err);
-    });
+        next(err);
+      });
   }
 };
 // ------------------------------------------------------------------------------------------------
@@ -128,7 +127,8 @@ const updateProfile = (req, res, next) => {
 
 // ------------------------------------------------------------------------------------------------
 module.exports = {
-  getCurrentUser,
+  getUser,
+  getUsers,
   createUser,
   login,
   updateProfile,
