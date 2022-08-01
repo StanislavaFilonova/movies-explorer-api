@@ -56,7 +56,7 @@ const createMovie = (req, res, next) => {
 
 // DELETE /movies/:_id — удаляет карточку по идентификатору
 const deleteMovie = (req, res, next) => {
-  Movie.findById(req.params)
+  Movie.findById(req.params.movieId)
     .then((movies) => {
       if (!movies) {
         throw new NotFoundError('Фильм с указанным _id не найден.');
