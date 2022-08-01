@@ -1,7 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-const { login, createUser } = require('../controllers/users');
+const { login, createUser,logout } = require('../controllers/users');
 
 const userRouter = require('./users');
 const moviesRouter = require('./movies');
@@ -16,6 +16,7 @@ const {
 // роуты, не требующие авторизации
 router.post('/signup', validatySignup, createUser);
 router.post('/signin', validatySignin, login);
+router.get('/logout', logout);
 
 // авторизация
 router.use(auth);

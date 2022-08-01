@@ -10,8 +10,9 @@ const routes = require('./routes/routes');
 
 const allowedCors = require('./utils/cors');
 
-const { PORT = 3000 } = process.env;
 const app = express();
+
+const { PORT = 3000 } = process.env;
 
 mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
   useUnifiedTopology: true,

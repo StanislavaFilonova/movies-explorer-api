@@ -10,56 +10,6 @@ const NotFoundError = require('../errors/NotFoundError');
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 // ------------------------------------------------------------------------------------------------
-// login (/POST) Залогирование пользователя/авторизация пользователя по паролю и эмейлу
-const login = (req, res, next) => {
-  const { email, password } = req.body;
-  return User.findUserByCredentials(email, password)
-    .then((user) => {
-      // создадим токен
-      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' }); // Параметры: пейлоуд токена и секретный ключ
-      // res.cookie('jwt', token, {
-      //   maxAge: 3600000,
-      //   httpOnly: true,
-      //   sameSite: 'none',
-      //   secure: true,
-      // });
-      // вернём токен
-      res.send({ token });
-      // аутентификация успешна! пользователь в переменной user
-    })
-    .catch(() => {
-      // возвращаем ошибку аутентификации
-      next(new UnauthorizedError('Неправильные почта или пароль.'));
-    });
-};
-// ------------------------------------------------------------------------------------------------
-//  GET /users — возвращает всех пользователей
-const getUsers = (req, res, next) => {
-  User.find({})
-    .then((result) => res.send(result))
-    .catch(next);
-};
-// ------------------------------------------------------------------------------------------------
-// GET /users/me — возвращает пользователя по _id
-const getUser = (req, res, next) => {
-  // Запустим проверку валидности параметров
-  User.findById(req.user._id)
-    .then((user) => {
-      if (user == null) {
-        next(new NotFoundError('Пользователь с данным Id не найден'));
-      } else {
-        res.status(200).send(user);
-      }
-    })
-    .catch((err) => {
-      if (err.user === 'CastError') {
-        next(new BadRequestError('Введен некорректный id'));
-      } else {
-        next(err);
-      }
-    });
-};
-// ------------------------------------------------------------------------------------------------
 // POST /signup — создаём пользователя по обязательным полям email и password
 const createUser = (req, res, next) => {
   const {
@@ -100,9 +50,58 @@ const createUser = (req, res, next) => {
               }));
         }
       }).catch((err) => {
-        next(err);
-      });
+      next(err);
+    });
   }
+};
+// ------------------------------------------------------------------------------------------------
+// login (/POST) Залогирование пользователя/авторизация пользователя по паролю и эмейлу
+const login = (req, res, next) => {
+  const { email, password } = req.body;
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      // создадим токен
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' }); // Параметры: пейлоуд токена и секретный ключ
+      res.cookie('jwt', `Bearer ${token}`, {
+        maxAge: 3600000,
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+      })
+        .status(200).send({ id: user._id });
+      // аутентификация успешна! пользователь в переменной user
+    })
+    .catch(() => {
+      // возвращаем ошибку аутентификации
+      next(new UnauthorizedError('Неправильные почта или пароль.'));
+    });
+};
+// ------------------------------------------------------------------------------------------------
+//  GET /users — возвращает всех пользователей
+const getUsers = (req, res, next) => {
+  User.find({})
+    .then((result) => res.send(result))
+    .catch(next);
+};
+// ------------------------------------------------------------------------------------------------
+// GET /users/me — возвращает пользователя по _id
+const getUser = (req, res, next) => {
+  // Запустим проверку валидности параметров
+  User.findById(req.user._id)
+    .then((user) => {
+      if (user == null) {
+        next(new NotFoundError('Пользователь с данным Id не найден'));
+      } else {
+        res.status(200).send(user);
+      }
+    })
+    .catch((err) => {
+      if (err.user === 'CastError') {
+        next(new BadRequestError('Введен некорректный id'));
+      } else {
+        next(err);
+      }
+    });
 };
 // ------------------------------------------------------------------------------------------------
 // PATCH /users/me — обновляет информацию о пользователе (имя и почтовый адрес)
@@ -125,11 +124,20 @@ const updateProfile = (req, res, next) => {
     });
 };
 
+const logout = (req, res, next) => {
+  try {
+    res.clearCookie('jwt');
+    res.status(200).send();
+  } catch (err) {
+    next(err);
+  }
+};
 // ------------------------------------------------------------------------------------------------
 module.exports = {
-  getUser,
-  getUsers,
   createUser,
   login,
+  getUser,
+  getUsers,
   updateProfile,
+  logout,
 };
