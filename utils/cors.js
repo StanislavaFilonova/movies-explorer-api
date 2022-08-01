@@ -1,9 +1,9 @@
 // Массив доменов, с которых разрешены кросс-доменные запросы
 const allowedCors = [
-   'https://front-diploma-movies.nomoredomains.xyz',
-   'http://front-diploma-movies.nomoredomains.xyz',
-   'http://localhost:3001',
-   'http://localhost:3000',
+  'https://front-diploma-movies.nomoredomains.xyz',
+  'http://front-diploma-movies.nomoredomains.xyz',
+  'http://localhost:3001',
+  'http://localhost:3000',
 ];
   /* eslint-disable consistent-return */
 module.exports = (req, res, next) => {

@@ -13,14 +13,6 @@ const allowedCors = require('./utils/cors');
 const { PORT = 3000 } = process.env;
 const app = express();
 
-// const { DATABASE_URL } = require('./utils/constants');
-
-// // подключаемся к серверу mongo
-// mongoose.connect(DATABASE_URL, {
-//   useUnifiedTopology: true,
-//   useNewUrlParser: true,
-// });
-
 mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
   useUnifiedTopology: true,
   useNewUrlParser: true,

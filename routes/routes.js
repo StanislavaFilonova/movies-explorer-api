@@ -15,9 +15,9 @@ const {
 
 // Краш-тест сервера
 router.get('/crash-test', () => {
-   setTimeout(() => {
-     throw new Error('Сервер сейчас упадёт');
-   }, 0);
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+    }, 0);
 });
 
 // роуты, не требующие авторизации
@@ -30,7 +30,7 @@ router.use(auth);
 router.use('/users', userRouter);
 router.use('/movies', moviesRouter);
 router.all('*', (req, res, next) => {
-   next(new NotFoundError('Запрашиваемый ресурс не найден.'));
+  next(new NotFoundError('Запрашиваемый ресурс не найден.'));
 });
 
 module.exports = router;
