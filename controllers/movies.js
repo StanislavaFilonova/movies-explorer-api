@@ -55,8 +55,8 @@ const createMovie = (req, res, next) => {
 };
 
 const deleteMovie = (req, res, next) => {
-  console.log(req.params._id);
-  Movie.findById(req.params)
+  console.log(req.params.movieId);
+  Movie.findById(req.params.movieId)
     .then((movies) => {
       if (!movies) {
         throw new NotFoundError('Фильм с указанным _id не найден.');
