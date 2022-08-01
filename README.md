@@ -12,3 +12,7 @@
 `npm run dev` — запускает сервер с hot-reload
 
 ## Ссылка на домен проекта
+Публичный IP адрес: 51.250.6.23
+
+Ссылка на домен сервера: diploma-movies-filonova.nomoredomains.xyz
+
