@@ -1,3 +1,4 @@
+// const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs'); // импортируем bcrypt
 const jwt = require('jsonwebtoken'); // импортируем модуль jsonwebtoken
 const User = require('../models/user');
@@ -62,13 +63,13 @@ const login = (req, res, next) => {
     .then((user) => {
       // создадим токен
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' }); // Параметры: пейлоуд токена и секретный ключ
-      res.cookie('jwt', `Bearer ${token}`, {
-        maxAge: 3600000,
-        httpOnly: true,
-        sameSite: 'none',
-        secure: true,
-      })
-        .status(200).send({ id: user._id });
+      // res.cookie('jwt', `Bearer ${token}`, {
+      //  maxAge: 3600000,
+      //  httpOnly: true,
+      //  sameSite: 'none',
+      //  secure: true,
+      // })
+      res.send({ token });
       // аутентификация успешна! пользователь в переменной user
     })
     .catch(() => {
@@ -77,14 +78,7 @@ const login = (req, res, next) => {
     });
 };
 // ------------------------------------------------------------------------------------------------
-//  GET /users — возвращает всех пользователей
-const getUsers = (req, res, next) => {
-  User.find({})
-    .then((result) => res.send(result))
-    .catch(next);
-};
-// ------------------------------------------------------------------------------------------------
-// GET /users/me — возвращает пользователя по _id
+// GET /users/me — возвращает информацию о текущем пользователе
 const getUser = (req, res, next) => {
   // Запустим проверку валидности параметров
   User.findById(req.user._id)
@@ -124,20 +118,10 @@ const updateProfile = (req, res, next) => {
     });
 };
 
-const logout = (req, res, next) => {
-  try {
-    res.clearCookie('jwt');
-    res.status(200).send();
-  } catch (err) {
-    next(err);
-  }
-};
 // ------------------------------------------------------------------------------------------------
 module.exports = {
   createUser,
   login,
   getUser,
-  getUsers,
   updateProfile,
-  logout,
 };
