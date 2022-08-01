@@ -7,7 +7,7 @@ const ConflictError = require('../errors/ConflictError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 const NotFoundError = require('../errors/NotFoundError');
 
-const { KEY_JWT } = require('../utils/constants');
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 // ------------------------------------------------------------------------------------------------
 // login (/POST) Залогирование пользователя/авторизация пользователя по паролю и эмейлу
@@ -16,7 +16,7 @@ const login = (req, res, next) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       // создадим токен
-      const token = jwt.sign({ _id: user._id }, KEY_JWT, { expiresIn: '7d' }); // Параметры: пейлоуд токена и секретный ключ
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' }); // Параметры: пейлоуд токена и секретный ключ
       // res.cookie('jwt', token, {
       //   maxAge: 3600000,
       //   httpOnly: true,

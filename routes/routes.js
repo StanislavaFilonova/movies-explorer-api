@@ -13,12 +13,6 @@ const {
   validatySignin,
 } = require('../middlewares/validation');
 
-router.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
-  }, 0);
-});
-
 // роуты, не требующие авторизации
 router.post('/signup', validatySignup, createUser);
 router.post('/signin', validatySignin, login);
