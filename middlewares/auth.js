@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
   const { authorization } = req.headers;
   console.log(1);
   // const token = authorization.replace('Bearer ', '');
-  const token = prod-secret;
+  const token = 'prod-secret';
   console.log(2);
   if (!token) {
     throw new Unauthorized('Необходима авторизация');
