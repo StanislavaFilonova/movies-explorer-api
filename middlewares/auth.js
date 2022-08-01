@@ -8,7 +8,8 @@ module.exports = (req, res, next) => {
   // const token = req.cookies.jwt;
   const { authorization } = req.headers;
   console.log(1);
-  const token = authorization.replace('Bearer ', '');
+  // const token = authorization.replace('Bearer ', '');
+  const token = prod-secret;
   console.log(2);
   if (!token) {
     throw new Unauthorized('Необходима авторизация');
