@@ -1,23 +1,40 @@
 const jwtToken = require('jsonwebtoken');
 const Unauthorized = require('../errors/UnauthorizedError');
-const { KEY_JWT } = require('../utils/constants');
-
+// const { KEY_JWT } = require('../utils/constants');
+const { NODE_ENV, JWT_SECRET } = process.env;
 /* eslint-disable consistent-return */
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
-  if (!authorization || !authorization.startsWith('Bearer ')) {
-    throw new Unauthorized('Необходимо авторизоваться');
-  }
   const token = authorization.replace('Bearer ', '');
-
+  if (!token) {
+    throw new Unauthorized('Необходима авторизация');
+  }
   let payload;
   try {
-    payload = jwtToken.verify(token, KEY_JWT);
+    // попытаемся верифицировать токен
+    payload = jwtToken.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
   } catch (err) {
+    // отправим ошибку, если не получилось
     next(new Unauthorized('Необходимо авторизоваться'));
   }
+  req.user = payload; // записываем пейлоуд в объект запроса
 
-  req.user = payload;
-
-  next();
+  next(); // пропускаем запрос дальше
 };
+
+// if (!authorization || !authorization.startsWith('Bearer ')) {
+//     throw new Unauthorized('Необходимо авторизоваться');
+//   }
+//   const token = authorization.replace('Bearer ', '');
+//
+//   let payload;
+//   try {
+//     payload = jwtToken.verify(token, KEY_JWT);
+//   } catch (err) {
+//     next(new Unauthorized('Необходимо авторизоваться'));
+//   }
+//
+//   req.user = payload;
+//
+//   next();
+// };
