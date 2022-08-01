@@ -81,11 +81,13 @@ const login = (req, res, next) => {
 // GET /users/me — возвращает информацию о текущем пользователе
 const getUser = (req, res, next) => {
   // Запустим проверку валидности параметров
+  console.log(5);
   User.findById(req.user._id)
     .then((user) => {
       if (user == null) {
         next(new NotFoundError('Пользователь с данным Id не найден'));
       } else {
+        console.log(6);
         res.status(200).send(user);
       }
     })

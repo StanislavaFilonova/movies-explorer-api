@@ -7,12 +7,14 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 module.exports = (req, res, next) => {
   // const token = req.cookies.jwt;
   const { authorization } = req.headers;
+  console.log(1);
   const token = authorization.replace('Bearer ', '');
-
+  console.log(2);
   if (!token) {
     throw new Unauthorized('Необходима авторизация');
   }
   let payload;
+  console.log(3);
   try {
     // попытаемся верифицировать токен
     payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
@@ -21,6 +23,6 @@ module.exports = (req, res, next) => {
     next(new Unauthorized('Необходимо авторизоваться'));
   }
   req.user = payload; // записываем пейлоуд в объект запроса
-
+  console.log(4);
   next(); // пропускаем запрос дальше
 };
