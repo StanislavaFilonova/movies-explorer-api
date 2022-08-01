@@ -28,7 +28,6 @@ const createMovie = (req, res, next) => {
     nameRU,
     nameEN,
   } = req.body;
-  const owner = req.user._id;
 
   Movie.create({
     country,
@@ -42,7 +41,7 @@ const createMovie = (req, res, next) => {
     movieId,
     nameRU,
     nameEN,
-    owner,
+    owner: req.user._id,
   })
     .then((movie) => res.status(200).send(movie))
     .catch((err) => {
@@ -56,7 +55,8 @@ const createMovie = (req, res, next) => {
 
 // DELETE /movies/:_id — удаляет карточку по идентификатору
 const deleteMovie = (req, res, next) => {
-  Movie.findById(req.params.movieId)
+  console.log(req.params._id);
+  Movie.findById(req.params._id)
     .then((movies) => {
       if (!movies) {
         throw new NotFoundError('Фильм с указанным _id не найден.');
