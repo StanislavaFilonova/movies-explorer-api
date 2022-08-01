@@ -24,8 +24,6 @@ const app = express();
 mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
   useUnifiedTopology: true,
   useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
 });
 // Подключаем корсы
 app.use(allowedCors);
