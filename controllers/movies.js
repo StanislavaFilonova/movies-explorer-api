@@ -28,6 +28,7 @@ const createMovie = (req, res, next) => {
     nameRU,
     nameEN,
   } = req.body;
+  const owner = req.user._id;
 
   Movie.create({
     country,
@@ -41,7 +42,7 @@ const createMovie = (req, res, next) => {
     movieId,
     nameRU,
     nameEN,
-    owner: req.user._id,
+    owner,
   })
     .then((movie) => res.status(200).send(movie))
     .catch((err) => {
@@ -53,14 +54,13 @@ const createMovie = (req, res, next) => {
     });
 };
 
-// DELETE /movies/:_id — удаляет карточку по идентификатору
 const deleteMovie = (req, res, next) => {
   console.log(req.params._id);
-  Movie.findById(req.params._id)
+  Movie.findById(req.params)
     .then((movies) => {
       if (!movies) {
         throw new NotFoundError('Фильм с указанным _id не найден.');
-      } else if (!movies.owner.equals(req.user._id)) {
+      } else if (movies.owner.toString() === req.user._id.toString()) {
         throw new ForbiddenError('Чужой фильм нельзя удалить.');
       } else {
         return movies.remove().then(() => res.send(movies));
