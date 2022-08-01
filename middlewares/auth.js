@@ -17,9 +17,11 @@ module.exports = (req, res, next) => {
   console.log(3);
   try {
     // попытаемся верифицировать токен
+    console.log("testPayload");
     payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
   } catch (err) {
     // отправим ошибку, если не получилось
+    console.log('testToken');
     next(new Unauthorized('Необходимо авторизоваться'));
   }
   req.user = payload; // записываем пейлоуд в объект запроса
