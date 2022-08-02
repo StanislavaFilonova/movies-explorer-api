@@ -54,14 +54,11 @@ const createMovie = (req, res, next) => {
     });
 };
 const deleteMovie = (req, res, next) => {
-  console.log(req.params);
   const { movieId } = req.params;
   Movie.findById(movieId)
     .orFail(() => new NotFoundError('Фильм с указанным _id не найден.'))
     .then((movie) => {
-      console.log(1);
       if (movie.owner.toString() === req.user._id.toString()) {
-        console.log(2);
         return Movie.findByIdAndRemove(movieId)
           .then(() => res.send({ message: 'Фильм удален' }));
       }
@@ -69,13 +66,12 @@ const deleteMovie = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequest('Переданы некорректные данные.'));
+        next(new BadRequestError('Переданы некорректные данные.'));
       } else {
         next(err);
       }
     });
 };
-
 
 module.exports = {
   getMovies,
