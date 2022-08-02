@@ -53,36 +53,29 @@ const createMovie = (req, res, next) => {
       }
     });
 };
-
 const deleteMovie = (req, res, next) => {
-  console.log(movieId);
-  console.log(owner)
+  console.log(req.params);
   const { movieId } = req.params;
-  const owner = req.user._id;
-
   Movie.findById(movieId)
-    .then((movies) => {
+    .orFail(() => new NotFoundError('Фильм с указанным _id не найден.'))
+    .then((movie) => {
       console.log(1);
-      if (!movies) {
-        throw new NotFoundError('Фильм с указанным _id не найден.');
-      } else if (movies.owner.toString() === req.user._id.toString()) {
+      if (movie.owner.toString() === req.user._id.toString()) {
         console.log(2);
         return Movie.findByIdAndRemove(movieId)
-          .then((deletedMovie) => {
-            console.log(3);
-            res.status(200).send({ data: deletedMovie });
-          })
+          .then(() => res.send({ message: 'Фильм удален' }));
       }
       return next(new ForbiddenError('Чужой фильм нельзя удалить.'));
     })
-     .catch((err) => {
-       if (err.name === 'CastError') {
-         return next(new BadRequestError('Переданы некорректные данные.'));
-       }
-       console.log(4);
-       return next(err);
-     });
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new BadRequest('Переданы некорректные данные.'));
+      } else {
+        next(err);
+      }
+    });
 };
+
 
 module.exports = {
   getMovies,
