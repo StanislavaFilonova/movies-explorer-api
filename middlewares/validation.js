@@ -31,10 +31,10 @@ const validatyMovie = celebrate({
     nameEN: Joi.string().required(),
   }),
 });
-// Валидация идентификатора фильма при удалении фильма (DELETE /movies/:_id)
+// Валидация идентификатора фильма при удалении фильма (DELETE /movies/:movieId)
 const validatyMovieId = celebrate({
   params: Joi.object().keys({
-    movieId: Joi.string().length(24).hex().required(),
+    movieId: Joi.string().length(24).hex(),
   }),
 });
 // Валидация при регистрации пользователя (POST /signup)
