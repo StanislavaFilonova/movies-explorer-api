@@ -31,7 +31,7 @@ const validatyMovie = celebrate({
     nameEN: Joi.string().required(),
   }),
 });
-// Валидация идентификатора фильма при удалении фильма (DELETE /movies/:movieId)
+// Валидация идентификатора фильма при удалении фильма (DELETE /movies/_id)
 const validatyMovieId = celebrate({
   params: Joi.object().keys({
     movieId: Joi.string().length(24).hex(),

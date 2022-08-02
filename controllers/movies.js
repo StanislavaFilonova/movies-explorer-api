@@ -77,7 +77,7 @@ const createMovie = (req, res, next) => {
 const deleteMovie = (req, res, next) => {
   console.log(filmid);
   console.log(owner)
-  const filmid = req.params.movieId;
+  const filmid = req.params._id;
   const owner = req.user._id;
   Movie.findById(filmid)
     .orFail(() => new NotFoundError('Фильм с указанным _id не найден.'))
