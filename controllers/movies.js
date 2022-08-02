@@ -55,23 +55,28 @@ const createMovie = (req, res, next) => {
 };
 
 const deleteMovie = (req, res, next) => {
-  console.log(req.params.movieId);
-  Movie.findById(req.params.movieId)
+  console.log(req.params);
+  Movie.findById(req.params)
     .then((movies) => {
       if (!movies) {
         throw new NotFoundError('Фильм с указанным _id не найден.');
       } else if (movies.owner.toString() === req.user._id.toString()) {
-        throw new ForbiddenError('Чужой фильм нельзя удалить.');
-      } else {
-        return movies.remove().then(() => res.send(movies));
+        return Movie.findByIdAndRemove(req.params)
+          .then(() => res.send({message: 'Фильм удален'}))
       }
+      return next(new ForbiddenError('Чужой фильм нельзя удалить.'));
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        return next(new BadRequestError('Переданы некорректные данные.'));
-      }
-      return next(err);
-    });
+//         throw new ForbiddenError('Чужой фильм нельзя удалить.');
+//       } else {
+//         return movies.remove().then(() => res.send(movies));
+//       }
+//     })
+     .catch((err) => {
+       if (err.name === 'CastError') {
+         return next(new BadRequestError('Переданы некорректные данные.'));
+       }
+       return next(err);
+     });
 };
 
 module.exports = {
