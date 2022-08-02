@@ -54,29 +54,47 @@ const createMovie = (req, res, next) => {
     });
 };
 
+// const deleteMovie = (req, res, next) => {
+//   console.log(req.params);
+//   Movie.findById(req.params.movieId)
+//     .then((movies) => {
+//       if (!movies) {
+//         return next(new NotFoundError('Фильм с указанным _id не найден.'));
+//       }
+//       if (JSON.stringify(req.user._id) !== JSON.stringify(movies.owner)) {
+//         return next(new ForbiddenError('Чужой фильм нельзя удалить.'));
+//       }
+//       return Movie.deleteOne(movies).then(() => res.send(movies));
+//     })
+//      .catch((err) => {
+//        if (err.name === 'CastError') {
+//          return next(new BadRequestError('Переданы некорректные данные.'));
+//        }
+//        return next(err);
+//      });
+// };
+// удаляет фильм
 const deleteMovie = (req, res, next) => {
-  console.log(req.params);
-  Movie.findById(req.params.movieId)
-    .then((movies) => {
-      if (!movies) {
-        return next(new NotFoundError('Фильм с указанным _id не найден.'));
-      }
-      if (JSON.stringify(req.user._id) !== JSON.stringify(movies.owner)) {
+  console.log(filmid);
+  console.log(owner)
+  const filmid = req.params.movieId;
+  const owner = req.user._id;
+  Movie.findById(filmid)
+    .orFail(() => new NotFoundError('Фильм с указанным _id не найден.'))
+    .then((movie) => {
+      if (!movie.owner.equals(owner)) {
         return next(new ForbiddenError('Чужой фильм нельзя удалить.'));
       }
-      return Movie.deleteOne(movies).then(() => res.send(movies));
+      return movie.remove()
+        .then(() => res.send({ data: movie }));
     })
-//         throw new ForbiddenError('Чужой фильм нельзя удалить.');
-//       } else {
-//         return movies.remove().then(() => res.send(movies));
-//       }
-//     })
-     .catch((err) => {
-       if (err.name === 'CastError') {
-         return next(new BadRequestError('Переданы некорректные данные.'));
-       }
-       return next(err);
-     });
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new BadRequestError('Переданы некорректные данные.'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports = {
