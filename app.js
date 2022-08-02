@@ -4,9 +4,11 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
+const helmet = require('helmet');
 const errorHandler = require('./middlewares/errorHandler');
 const auth = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const rateLimiter = require('./middlewares/rateLimiter');
 
 const {
   login,
@@ -32,6 +34,10 @@ mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
 });
 // Подключаем корсы
 app.use(allowedCors);
+
+app.use(rateLimiter);
+
+app.use(helmet());
 
 app.use(bodyParser.json()); // Собирание json
 app.use(bodyParser.urlencoded({ extended: true })); // Приём страниц внутри Post-запроса
@@ -65,7 +71,4 @@ app.use(errors());
 
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  // Если всё работает, консоль покажет, какой порт приложение слушает
-  console.log(`App listening on port ${PORT}`);
-});
+app.listen(PORT);

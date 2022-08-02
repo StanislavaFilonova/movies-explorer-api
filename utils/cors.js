@@ -2,6 +2,8 @@
 const allowedCors = [
   'https://front-diploma-movies.nomoredomains.xyz',
   'http://front-diploma-movies.nomoredomains.xyz',
+  'http://diploma-movies-filonova.nomoredomains.xyz',
+  'https://diploma-movies-filonova.nomoredomains.xyz',
   'http://localhost:3001',
   'http://localhost:3000',
 ];

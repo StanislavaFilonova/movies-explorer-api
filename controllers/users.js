@@ -11,7 +11,7 @@ const NotFoundError = require('../errors/NotFoundError');
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 // ------------------------------------------------------------------------------------------------
-// POST /signup — создаём пользователя по обязательным полям email и password
+// POST /signup — создаём пользователя по обязательным полям email и pass
 const createUser = (req, res, next) => {
   const {
     name, email, password,
@@ -63,12 +63,6 @@ const login = (req, res, next) => {
     .then((user) => {
       // создадим токен
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' }); // Параметры: пейлоуд токена и секретный ключ
-      // res.cookie('jwt', `Bearer ${token}`, {
-      //  maxAge: 3600000,
-      //  httpOnly: true,
-      //  sameSite: 'none',
-      //  secure: true,
-      // })
       res.send({ token });
       // аутентификация успешна! пользователь в переменной user
     })

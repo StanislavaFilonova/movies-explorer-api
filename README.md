@@ -16,3 +16,4 @@
 
 Ссылка на домен сервера: diploma-movies-filonova.nomoredomains.xyz
 
+Ссылка на фронт часть: front-diploma-movies.nomoredomains.xyz
