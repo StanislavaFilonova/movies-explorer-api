@@ -28,23 +28,11 @@ const app = express();
 const usersRoute = require('./routes/users');
 const moviesRoute = require('./routes/movies');
 
-// функция обработки ошибок при подключении к серверу mongo
-async function main() {
-  try {
-    // await mongoose.connect('mongodb://localhost:27017/moviesdb');
-    await mongoose.connect(BD_URL);
-  } catch (error) {
-    console.log(error);
-  }
-  app.listen(PORT, () => {
-    console.log(`App listening on port ${PORT}`); // Если всё работает, консоль покажет, какой порт приложение слушает
-  });
-}
-// // подключаемся к серверу mongo
-// mongoose.connect(BD_URL, {
-//   useUnifiedTopology: true,
-//   useNewUrlParser: true,
-// });
+// подключаемся к серверу mongo
+mongoose.connect(BD_URL, {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+});
 // Подключаем корсы
 const cors = (req, res, next) => {
   const { origin } = req.headers;
@@ -102,4 +90,4 @@ app.use(errors());
 
 app.use(errorHandler);
 
-main();
+app.listen(PORT);
