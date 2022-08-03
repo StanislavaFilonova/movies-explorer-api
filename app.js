@@ -29,7 +29,7 @@ const usersRoute = require('./routes/users');
 const moviesRoute = require('./routes/movies');
 
 // подключаемся к серверу mongo
-mongoose.connect(BD_URL, {
+mongoose.connect(NODE_ENV === 'production' ? MONGODB_URL : 'mongodb://localhost:27017/bitfilmsdb', {
   useUnifiedTopology: true,
   useNewUrlParser: true,
 });
