@@ -7,18 +7,22 @@ const BadRequestError = require('../errors/BadRequestError');
 const ConflictError = require('../errors/ConflictError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 const NotFoundError = require('../errors/NotFoundError');
+const {
+  notFoundUserId,
+  incorrectData,
+  userAlreadyCreated,
+  invalidAuth,
+} = require('../errors/errorMessages');
 
 const { KEY_JWT } = require('../utils/constants');
 
 // ------------------------------------------------------------------------------------------------
 // POST /signup — создаём пользователя по обязательным полям email и pass
 const createUser = (req, res, next) => {
-  console.log(1);
   const {
     name, email, password,
   } = req.body;
   // хешируем пароль
-  console.log(2);
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
       name,
@@ -26,7 +30,6 @@ const createUser = (req, res, next) => {
       password: hash, // записываем хеш в базу
     }))
     .then((user) => User.findById(user._id)).then((user) => {
-    console.log(3);
       res.status(200).send({
         name: user.name,
         _id: user._id,
@@ -34,13 +37,11 @@ const createUser = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(4);
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные при создании пользователя.'));
+        next(new BadRequestError(incorrectData));
       } else if (err.code === 11000) { // Ошибка дублирования ключа
-        next(new ConflictError('Пользователь с таким email уже существует.'));
+        next(new ConflictError(userAlreadyCreated));
       } else {
-        console.log(5);
         next(err);
       }
     });
@@ -59,7 +60,7 @@ const login = (req, res, next) => {
     })
     .catch(() => {
       // возвращаем ошибку аутентификации
-      next(new UnauthorizedError('Неправильные почта или пароль.'));
+      next(new UnauthorizedError(invalidAuth));
     });
 };
 // ------------------------------------------------------------------------------------------------
@@ -69,7 +70,7 @@ const getUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (user == null) {
-        next(new NotFoundError('Пользователь с данным Id не найден'));
+        next(new NotFoundError(notFoundUserId));
       } else {
         res.status(200).send(user);
       }
@@ -83,14 +84,14 @@ const updateProfile = (req, res, next) => {
   User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
-        next(new NotFoundError('Пользователь по указанному _id не найден.'));
+        next(new NotFoundError(notFoundUserId));
       } else {
         res.status(200).send(user);
       }
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные при обновлении пользователя'));
+        next(new BadRequestError(incorrectData));
       } else {
         next(err);
       }

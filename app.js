@@ -1,4 +1,4 @@
-require('dotenv').config();
+// require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -28,15 +28,26 @@ const app = express();
 const usersRoute = require('./routes/users');
 const moviesRoute = require('./routes/movies');
 
-// подключаемся к серверу mongo
-mongoose.connect(BD_URL, {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-});
+// функция обработки ошибок при подключении к серверу mongo
+async function main() {
+  try {
+    // await mongoose.connect('mongodb://localhost:27017/moviesdb');
+    await mongoose.connect(BD_URL);
+  } catch (error) {
+    console.log(error);
+  }
+  app.listen(PORT, () => {
+    console.log(`App listening on port ${PORT}`); // Если всё работает, консоль покажет, какой порт приложение слушает
+  });
+}
+// // подключаемся к серверу mongo
+// mongoose.connect(BD_URL, {
+//   useUnifiedTopology: true,
+//   useNewUrlParser: true,
+// });
 // Подключаем корсы
 const cors = (req, res, next) => {
   const { origin } = req.headers;
-  // console.log('cors: origin = ', origin);
   const { method } = req;
   const requestHeaders = req.headers['access-control-request-headers'];
   const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
@@ -91,4 +102,4 @@ app.use(errors());
 
 app.use(errorHandler);
 
-app.listen(PORT);
+main();
