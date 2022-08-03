@@ -9,13 +9,14 @@ const errorHandler = require('./middlewares/errorHandler');
 const auth = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const rateLimiter = require('./middlewares/rateLimiter');
+const { BD_URL } = require('./utils/constants');
 
 const {
   login,
   createUser,
 } = require('./controllers/users');
 
-const allowedCors = require('./utils/cors');
+const cors = require('./utils/cors');
 
 const { validatySignup, validatySignin } = require('./middlewares/validation');
 
@@ -28,12 +29,13 @@ const usersRoute = require('./routes/users');
 const moviesRoute = require('./routes/movies');
 
 // подключаемся к серверу mongo
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+mongoose.connect(BD_URL, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
 });
 // Подключаем корсы
-app.use(allowedCors);
+app.use(cors);
+app.use(requestLogger); // подключаем логгер запросов
 
 app.use(rateLimiter);
 
@@ -42,8 +44,6 @@ app.use(helmet());
 app.use(bodyParser.json()); // Собирание json
 app.use(bodyParser.urlencoded({ extended: true })); // Приём страниц внутри Post-запроса
 app.use(cookieParser());
-
-app.use(requestLogger); // подключаем логгер запросов
 
 // Краш-тест сервера
 app.get('/crash-test', () => {

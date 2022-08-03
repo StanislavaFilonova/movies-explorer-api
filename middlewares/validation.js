@@ -34,7 +34,7 @@ const validatyMovie = celebrate({
 // Валидация идентификатора фильма при удалении фильма (DELETE /movies/_id)
 const validatyMovieId = celebrate({
   params: Joi.object().keys({
-    movieId: Joi.string().length(24).hex(),
+    movieId: Joi.string().required().length(24).hex(),
   }),
 });
 // Валидация при регистрации пользователя (POST /signup)
@@ -42,14 +42,14 @@ const validatySignup = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30).required(),
     email: Joi.string().required().email({ minDomainSegments: 2 }),
-    password: Joi.string().required().min(6),
+    password: Joi.string().required(),
   }),
 });
 // Валидация при входе пользователя на страничку (POST /signin)
 const validatySignin = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email({ minDomainSegments: 2 }),
-    password: Joi.string().required().min(6),
+    password: Joi.string().required(),
   }),
 });
 
