@@ -13,10 +13,12 @@ const { KEY_JWT } = require('../utils/constants');
 // ------------------------------------------------------------------------------------------------
 // POST /signup — создаём пользователя по обязательным полям email и pass
 const createUser = (req, res, next) => {
+  console.log(1);
   const {
     name, email, password,
   } = req.body;
   // хешируем пароль
+  console.log(2);
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
       name,
@@ -24,6 +26,7 @@ const createUser = (req, res, next) => {
       password: hash, // записываем хеш в базу
     }))
     .then((user) => User.findById(user._id)).then((user) => {
+    console.log(3);
       res.status(200).send({
         name: user.name,
         _id: user._id,
@@ -31,11 +34,13 @@ const createUser = (req, res, next) => {
       });
     })
     .catch((err) => {
+      console.log(4);
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные при создании пользователя.'));
       } else if (err.code === 11000) { // Ошибка дублирования ключа
         next(new ConflictError('Пользователь с таким email уже существует.'));
       } else {
+        console.log(5);
         next(err);
       }
     });
