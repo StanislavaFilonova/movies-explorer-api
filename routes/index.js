@@ -1,12 +1,12 @@
 const express = require('express');
-const { validatySignup, validatySignin } = require('./middlewares/validation');
+const { validatySignup, validatySignin } = require('../middlewares/validation');
 const usersRoute = require('./users');
 const moviesRoute = require('./movies');
-const NotFoundError = require('./errors/NotFoundError');
+const NotFoundError = require('../errors/NotFoundError');
 const {
   login,
   createUser,
-} = require('./controllers/users');
+} = require('../controllers/users');
 
 const auth = require('../middlewares/auth'); // авторизация
 
