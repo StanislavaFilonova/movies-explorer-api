@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const Unauthorized = require('../errors/UnauthorizedError');
-const needAuthorization = require('../errors/errorMessages')
+const needAuthorization = require('../errors/errorMessages');
 
 const { KEY_JWT } = require('../utils/constants');
 
@@ -22,4 +22,3 @@ module.exports = (req, res, next) => {
   req.user = payload; // записываем пейлоуд в объект запроса
   return next(); // пропускаем запрос дальше
 };
-

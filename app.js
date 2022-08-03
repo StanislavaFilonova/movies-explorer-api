@@ -9,6 +9,7 @@ const errorHandler = require('./middlewares/errorHandler');
 const auth = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const rateLimiter = require('./middlewares/rateLimiter');
+const { BD_URL } = require('./utils/constants');
 
 const {
   login,
@@ -28,7 +29,7 @@ const usersRoute = require('./routes/users');
 const moviesRoute = require('./routes/movies');
 
 // подключаемся к серверу mongo
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+mongoose.connect(BD_URL, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
 });

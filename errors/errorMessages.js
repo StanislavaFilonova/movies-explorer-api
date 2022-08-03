@@ -10,7 +10,7 @@ const userAlreadyCreated = 'Пользователь с таким email уже 
 const userNotAuthorized = 'Пользователь не авторизован';
 const notFoundFilmId = 'Фильм с указанным _id не найден.';
 const noRightsDelete = 'Чужой фильм нельзя удалить.';
-const needAuthorization = 'Необходима авторизация.'
+const needAuthorization = 'Необходима авторизация.';
 
 module.exports = {
   invalidName,

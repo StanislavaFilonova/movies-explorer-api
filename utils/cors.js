@@ -8,7 +8,6 @@ const allowedCors = [
   'http://localhost:3000',
 ];
 
-/* eslint-disable consistent-return */
 module.exports = (req, res, next) => {
   // проверяем, что источник запроса есть среди разрешённых
   const { origin } = req.headers; // Сохраняем источник запроса в переменную origin
@@ -37,4 +36,3 @@ module.exports = (req, res, next) => {
 
   return next();
 };
-

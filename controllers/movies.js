@@ -65,7 +65,6 @@ const deleteMovie = (req, res, next) => {
     .orFail(() => new NotFoundError(notFoundFilmId))
     .then((movie) => {
       if (movie.owner.toString() === req.user._id.toString()) {
-        console.log(1);
         return Movie.findByIdAndRemove(movieId)
           .then(() => res.send({ message: 'Фильм удален' }));
       }
@@ -79,7 +78,6 @@ const deleteMovie = (req, res, next) => {
       }
     });
 };
-
 
 module.exports = {
   getMovies,
