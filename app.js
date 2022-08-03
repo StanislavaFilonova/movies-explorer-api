@@ -16,7 +16,7 @@ const {
   createUser,
 } = require('./controllers/users');
 
-const cors = require('./utils/cors');
+//const cors = require('./utils/cors');
 
 const { validatySignup, validatySignin } = require('./middlewares/validation');
 
@@ -34,6 +34,26 @@ mongoose.connect(BD_URL, {
   useNewUrlParser: true,
 });
 // Подключаем корсы
+const cors = (req, res, next) => {
+  const { origin } = req.headers;
+  // console.log('cors: origin = ', origin);
+  const { method } = req;
+  const requestHeaders = req.headers['access-control-request-headers'];
+  const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
+
+  res.header('Access-Control-Allow-Origin', origin);
+  res.header('Access-Control-Allow-Credentials', true);
+
+  if (method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+    res.header('Access-Control-Allow-Headers', requestHeaders);
+
+    return res.end();
+  }
+
+  return next();
+};
+
 app.use(cors);
 app.use(requestLogger); // подключаем логгер запросов
 
