@@ -4,7 +4,7 @@ const needAuthorization = require('../errors/errorMessages')
 
 const { KEY_JWT } = require('../utils/constants');
 
-const auth = (req, res, next) => {
+module.exports = (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization || !authorization.startsWith('Bearer ')) { // убеждаемся, что он есть или начинается с Bearer
     next(new Unauthorized(needAuthorization));
@@ -20,7 +20,6 @@ const auth = (req, res, next) => {
     next(new Unauthorized(needAuthorization));
   }
   req.user = payload; // записываем пейлоуд в объект запроса
-  next(); // пропускаем запрос дальше
+  return next(); // пропускаем запрос дальше
 };
 
-module.exports = auth;
