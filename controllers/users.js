@@ -17,7 +17,7 @@ const {
 const { KEY_JWT } = require('../utils/constants');
 
 // ------------------------------------------------------------------------------------------------
-// POST /signup — создаём пользователя по обязательным полям email и pass
+// POST /sign-up — создаём пользователя по обязательным полям email и pass
 const createUser = (req, res, next) => {
   const {
     name, email, password,

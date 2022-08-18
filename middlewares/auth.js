@@ -7,7 +7,7 @@ const { KEY_JWT } = require('../utils/constants');
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization || !authorization.startsWith('Bearer ')) { // убеждаемся, что он есть или начинается с Bearer
-    next(new Unauthorized(needAuthorization));
+    return next(new Unauthorized(needAuthorization));
   }
   const token = authorization.replace('Bearer ', '');
 

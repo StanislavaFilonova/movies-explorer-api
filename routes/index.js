@@ -20,9 +20,9 @@ app.get('/crash-test', () => {
 
 // роуты, не требующие авторизации
 //  логин
-app.post('/signin', validatySignin, login);
+app.post('/sign-in', validatySignin, login);
 //  регистрация
-app.post('/signup', validatySignup, createUser);
+app.post('/sign-up', validatySignup, createUser);
 
 // авторизация
 app.use(auth);
