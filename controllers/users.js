@@ -98,10 +98,20 @@ const updateProfile = (req, res, next) => {
     });
 };
 
+const signOut = (req, res) => {
+  res.clearCookie('jwt', {
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  })
+    .status(200).send('Успешно');
+};
+
 // ------------------------------------------------------------------------------------------------
 module.exports = {
   createUser,
   login,
   getUser,
   updateProfile,
+  signOut,
 };

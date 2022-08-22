@@ -6,6 +6,7 @@ const NotFoundError = require('../errors/NotFoundError');
 const {
   login,
   createUser,
+  signOut
 } = require('../controllers/users');
 
 const auth = require('../middlewares/auth'); // авторизация
@@ -23,7 +24,8 @@ app.get('/crash-test', () => {
 app.post('/sign-in', validatySignin, login);
 //  регистрация
 app.post('/sign-up', validatySignup, createUser);
-
+// Выход
+app.delete('/sign-out', signOut);
 // авторизация
 app.use(auth);
 

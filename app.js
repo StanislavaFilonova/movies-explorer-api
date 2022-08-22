@@ -12,7 +12,7 @@ const { BD_URL } = require('./utils/constants');
 
 const allowedCors = require('./utils/cors');
 
-const { PORT = 3001 } = process.env;
+const { PORT = 3000 } = process.env;
 const app = express();
 
 const router = require('./routes/index');
